@@ -1,0 +1,18 @@
+# Compiled source #
+###################
+*.prg
+
+# Resources/Generated #
+#######################
+resources/
+*.mcgen
+*.mbc
+
+# Build directories #
+#####################
+build/
+bin/
+
+# VSCode #
+##########
+*.code-workspace
