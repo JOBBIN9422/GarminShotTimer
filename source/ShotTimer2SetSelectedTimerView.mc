@@ -112,6 +112,9 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     // Load your resources here
     function onLayout(dc as Dc) as Void {
         //setLayout(Rez.Layouts.SetSelectedTimerLayout(dc));
+
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
+        dc.clear();
     }
 
     // Called when this View is brought to the foreground. Restore

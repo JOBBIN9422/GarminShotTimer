@@ -4,15 +4,21 @@ import Toybox.Timer;
 import Toybox.Lang;
 import Toybox.Time;
 
-class ShotTimer2ActiveTimerView extends WatchUi.View {
-
+class ShotTimer2ActiveTimerView extends WatchUi.View
+{
     private var _timerState as IntervalTimer;
     private var _timer as Timer.Timer?;
-    private var hasVibratedForIntervalStart as Boolean = false;
 
-    function initialize(timerState as IntervalTimer) {
+    // state flags
+    private var _intervalStartAlertRequested as Boolean = false;
+    private var _intervalFinishAlertRequested as Boolean = false;
+    private var _exitRequested as Boolean = false;
+    private var _alertTriggered as Boolean = false;
+
+    function initialize(timerState as IntervalTimer)
+    {
         _timerState = timerState;
-        
+        _timer = new Timer.Timer();
         
         View.initialize();
     }
@@ -22,37 +28,53 @@ class ShotTimer2ActiveTimerView extends WatchUi.View {
     {
         //setLayout(Rez.Layouts.ActiveTimerLayout(dc));
 
-        _timer = new Timer.Timer();
-        _timer.start(method(:timerCallback), 100, true);
-        _timerState.start();
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
+        dc.clear();
     }
     
-    function playVibeAndTone() as Void
+    function playVibeAndTone(shouldResetAlertFlag as Boolean) as Void
     {
-        
-        var toneData = 
-        [
-            new Attention.ToneProfile(2500, 500)
-        ];
-        var vibeData =
-        [
-            new Attention.VibeProfile(100, 500)
-        ];
-        Attention.vibrate(vibeData);
-        Attention.playTone({:toneProfile=>toneData});
+        // allow to reset alert flag for subsequent alerts
+        if (shouldResetAlertFlag)
+        {
+            _alertTriggered = false;
+        }
+
+        // play tone and vibrate only if alert has not already played
+        if (!_alertTriggered)
+        {
+            _alertTriggered = true;  
+
+            System.println("Playing vibe and tone");   
+            var toneData = 
+            [
+                new Attention.ToneProfile(2500, 500)
+            ];
+            var vibeData =
+            [
+                new Attention.VibeProfile(100, 500)
+            ];
+            Attention.vibrate(vibeData);
+            Attention.playTone({:toneProfile=>toneData});
+        }
     }
 
 
     function timerCallback() as Void
     {
+        // advance timer state
         _timerState.doTimerTick(0.1);
 
-        // If the interval timer just started, vibrate the watch
-        if (_timerState.justStartedIntervalTimer() and !hasVibratedForIntervalStart)
+        // if the interval timer has finished, request alert playback and exit
+        if (_timerState.getCurrentState() == IntervalTimer.STATE_FINISHED)
         {
-            hasVibratedForIntervalStart = true;
-
-            playVibeAndTone();
+            _exitRequested = true;
+            _intervalFinishAlertRequested = true;
+        }
+        // If the interval timer has just started, request alert playback
+        else if (_timerState.justStartedIntervalTimer())
+        {
+            _intervalStartAlertRequested = true;
         }
 
         // Request the view to be redrawn
@@ -62,7 +84,10 @@ class ShotTimer2ActiveTimerView extends WatchUi.View {
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
-    function onShow() as Void {
+    function onShow() as Void
+    {    
+        _timerState.start();
+        _timer.start(method(:timerCallback), 100, true);   
     }
 
     // Update the view
@@ -70,26 +95,34 @@ class ShotTimer2ActiveTimerView extends WatchUi.View {
     {
         dc.clear();
 
-        if (_timerState.getCurrentState() == IntervalTimer.STATE_FINISHED)
+        // handle event flags (playback and/or exit)
+        if (_intervalStartAlertRequested)
         {
+            playVibeAndTone(false);
+            _intervalStartAlertRequested = false;
+        }
+        if (_intervalFinishAlertRequested)
+        {
+            playVibeAndTone(true);
+            _intervalFinishAlertRequested = false;
+        }
+        if (_exitRequested)
+        {
+            _exitRequested = false;
             WatchUi.popView(WatchUi.SLIDE_DOWN);
-
-            _timer.stop();
-            _timerState.reset();
-
-            playVibeAndTone();
-
             return;
         }
 
+        // fetch timer val
         var timerVal = _timerState.getCurrentTimeRemaining() >= 0.0 ? _timerState.getCurrentTimeRemaining() : 0.0;
 
+        // calculate drawing offsets
         var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
         var fontWidth = fontHeight * 0.6;
-
         var centerX = dc.getWidth() / 2 - fontWidth / 2;
         var centerY = dc.getHeight() / 2 - fontHeight / 2;
 
+        // draw timer value in format "0.0"
         dc.drawText(centerX, centerY, Graphics.FONT_LARGE, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_LEFT);
 
 
@@ -109,7 +142,11 @@ class ShotTimer2ActiveTimerView extends WatchUi.View {
     {
         _timer.stop();
         _timerState.reset();
-        hasVibratedForIntervalStart = false;
+
+        _intervalStartAlertRequested = false;
+        _intervalFinishAlertRequested = false;
+        _exitRequested = false;
+        _alertTriggered = false;
     }   
 
 }
