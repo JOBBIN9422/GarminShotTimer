@@ -143,42 +143,10 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
             timerVal = _timerState.getIntervalDuration();
         }
 
-        //drawTimerValBasic(dc, timerVal);
-
-        //Drawing.drawTimerValWithSelectorBasic(dc, timerVal, _selectedDigit);
         Drawing.drawTimerValueWithFontAndSelector(dc, timerVal, _selectedDigit, _font);
         
         // Call the parent onUpdate function to redraw the layout
         //View.onUpdate(dc);
-    }
-
-    function drawTimerValBasic(dc as Dc, timerVal as Float) as Void
-    {
-        var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
-        var fontWidth = fontHeight * 0.6;
-        //var dotWidth = fontWidth * 0.4;
-
-        var centerX = dc.getWidth() / 2 - fontWidth / 2;
-        var centerY = dc.getHeight() / 2 - fontHeight / 2;
-
-        var pickerSecondsOffsetX = centerX + fontHeight * 0.2;
-        var pickerOffsetY = centerY + fontHeight;
-        var pickerTenthsOffsetX = pickerSecondsOffsetX + fontHeight * 0.5;
-
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.drawText(centerX, centerY, Graphics.FONT_LARGE, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_LEFT);
-
-        // Indicate selected digit
-        if (_selectedDigit == DIGIT_SECONDS)
-        {
-            //dc.drawRectangle(centerX, centerY, fontWidth, fontHeight); // around seconds
-            dc.drawText(pickerSecondsOffsetX, pickerOffsetY, Graphics.FONT_MEDIUM, "^", Graphics.TEXT_JUSTIFY_CENTER);
-        }
-        else if (_selectedDigit == DIGIT_TENTHS)
-        {
-            //dc.drawRectangle(centerX + fontWidth, centerY, fontWidth, fontHeight); // around tenths
-            dc.drawText(pickerTenthsOffsetX, pickerOffsetY, Graphics.FONT_MEDIUM, "^", Graphics.TEXT_JUSTIFY_CENTER);
-        }
     }
 
     // Called when this View is removed from the screen. Save the

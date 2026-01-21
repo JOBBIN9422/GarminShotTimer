@@ -117,19 +117,9 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
             return;
         }
 
-        // fetch timer val
         var timerVal = _timerState.getCurrentTimeRemaining() >= 0.0 ? _timerState.getCurrentTimeRemaining() : 0.0;
-
-        // calculate drawing offsets
-        //var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
-        //var fontWidth = fontHeight * 0.6;
-        //var centerX = dc.getWidth() / 2 - fontWidth / 2;
-        //var centerY = dc.getHeight() / 2 - fontHeight / 2;
-
-        // draw timer value in format "0.0"
-        //dc.drawText(centerX, centerY, Graphics.FONT_LARGE, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_LEFT);
-
         Drawing.drawTimerValueWithFont(dc, timerVal, _font);
+        
         // Call the parent onUpdate function to redraw the layout
         //View.onUpdate(dc);
     }
