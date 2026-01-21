@@ -62,11 +62,11 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         if (_selectedTimerId == :start_delay)
         {
             var val = _timerState.getDelayDuration();
-            if (_selectedDigit == DIGIT_SECONDS)
+            if (_selectedDigit == DIGIT_SECONDS and val >= 1.0)
             {
                 val -= 1.0;
             }
-            else if (_selectedDigit == DIGIT_TENTHS)
+            else if (_selectedDigit == DIGIT_TENTHS and val >= 0.1)
             {
                 val -= 0.1;
             }
@@ -75,11 +75,11 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         else if (_selectedTimerId == :interval_duration)
         {
             var val = _timerState.getIntervalDuration();
-            if (_selectedDigit == DIGIT_SECONDS)
+            if (_selectedDigit == DIGIT_SECONDS and val >= 1.0)
             {
                 val -= 1.0;
             }
-            else if (_selectedDigit == DIGIT_TENTHS)
+            else if (_selectedDigit == DIGIT_TENTHS and val >= 0.1)
             {
                 val -= 0.1;
             }
