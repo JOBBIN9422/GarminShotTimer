@@ -16,7 +16,9 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
 
     private var _timerState as IntervalTimer;
     private var _selectedTimerId as Symbol;
+
     private var _selectedDigit as DigitSelection = DIGIT_SECONDS;
+    private var _exitRequested as Boolean = false;
 
     function initialize(timerState as IntervalTimer, selectedTimerId as Symbol) {
         _timerState = timerState;
@@ -95,7 +97,8 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         }
         else
         {
-            WatchUi.popView(WatchUi.SLIDE_DOWN);
+            _exitRequested = true;
+            //WatchUi.popView(WatchUi.SLIDE_DOWN);
         }
     }
 
@@ -107,7 +110,8 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         }
         else
         {
-            WatchUi.popView(WatchUi.SLIDE_DOWN);
+            _exitRequested = true;
+            //WatchUi.popView(WatchUi.SLIDE_DOWN);
         }
     }
 
@@ -132,6 +136,13 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     {
         dc.clear();
 
+        if (_exitRequested)
+        {
+            _exitRequested = false;
+            WatchUi.popView(WatchUi.SLIDE_DOWN);
+            return;
+        }
+
         var timerVal = 0.0;
         if (_selectedTimerId == :start_delay)
         {
@@ -152,7 +163,15 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     // Called when this View is removed from the screen. Save the
     // state of this View here. This includes freeing resources from
     // memory.
-    function onHide() as Void {
+    function onHide() as Void
+    {
+        resetViewState();
+    }
+
+    private function resetViewState() as Void
+    {
+        _selectedDigit = DIGIT_SECONDS;
+        _exitRequested = false;
     }
 
 }
