@@ -1,0 +1,5 @@
+<menu id="TimerMainMenu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <menu-item id="interval_start_delay" label="@Strings.main_menu_label_interval_start_delay" />
+    <menu-item id="interval_duration" label="@Strings.main_menu_label_interval_duration" />
+    <menu-item id="start_selector" label="@Strings.main_menu_start_stop" />
+</menu>

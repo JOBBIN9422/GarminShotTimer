@@ -6,6 +6,8 @@ import Toybox.Time;
 
 class ShotTimer2ActiveTimerView extends WatchUi.View
 {
+    private var _font as FontResource?;
+
     private var _timerState as IntervalTimer;
     private var _timer as Timer.Timer?;
 
@@ -27,6 +29,8 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
     function onLayout(dc as Dc) as Void
     {
         //setLayout(Rez.Layouts.ActiveTimerLayout(dc));
+
+        _font = WatchUi.loadResource($.Rez.Fonts.id_font_gameplay) as FontResource;
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.clear();
@@ -117,15 +121,15 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
         var timerVal = _timerState.getCurrentTimeRemaining() >= 0.0 ? _timerState.getCurrentTimeRemaining() : 0.0;
 
         // calculate drawing offsets
-        var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
-        var fontWidth = fontHeight * 0.6;
-        var centerX = dc.getWidth() / 2 - fontWidth / 2;
-        var centerY = dc.getHeight() / 2 - fontHeight / 2;
+        //var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
+        //var fontWidth = fontHeight * 0.6;
+        //var centerX = dc.getWidth() / 2 - fontWidth / 2;
+        //var centerY = dc.getHeight() / 2 - fontHeight / 2;
 
         // draw timer value in format "0.0"
-        dc.drawText(centerX, centerY, Graphics.FONT_LARGE, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_LEFT);
+        //dc.drawText(centerX, centerY, Graphics.FONT_LARGE, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_LEFT);
 
-
+        Drawing.drawTimerValueWithFont(dc, timerVal, _font);
         // Call the parent onUpdate function to redraw the layout
         //View.onUpdate(dc);
     }

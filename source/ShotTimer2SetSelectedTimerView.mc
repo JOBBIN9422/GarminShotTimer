@@ -12,6 +12,8 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         DIGIT_TENTHS
     }
 
+    private var _font as FontResource?;
+
     private var _timerState as IntervalTimer;
     private var _selectedTimerId as Symbol;
     private var _selectedDigit as DigitSelection = DIGIT_SECONDS;
@@ -113,6 +115,8 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     function onLayout(dc as Dc) as Void {
         //setLayout(Rez.Layouts.SetSelectedTimerLayout(dc));
 
+        _font = WatchUi.loadResource($.Rez.Fonts.id_font_gameplay) as FontResource;
+
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.clear();
     }
@@ -128,20 +132,7 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     {
         dc.clear();
 
-        var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
-        var fontWidth = fontHeight * 0.6;
-        var dotWidth = fontWidth * 0.4;
-
-        var centerX = dc.getWidth() / 2 - fontWidth / 2;
-        var centerY = dc.getHeight() / 2 - fontHeight / 2;
-
-        var pickerSecondsOffsetX = centerX + fontHeight * 0.2;
-        var pickerOffsetY = centerY + fontHeight;
-        var pickerTenthsOffsetX = pickerSecondsOffsetX + fontHeight * 0.5;
-
-
         var timerVal = 0.0;
-
         if (_selectedTimerId == :start_delay)
         {
             timerVal = _timerState.getDelayDuration();
@@ -151,6 +142,28 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         {
             timerVal = _timerState.getIntervalDuration();
         }
+
+        //drawTimerValBasic(dc, timerVal);
+
+        //Drawing.drawTimerValWithSelectorBasic(dc, timerVal, _selectedDigit);
+        Drawing.drawTimerValueWithFontAndSelector(dc, timerVal, _selectedDigit, _font);
+        
+        // Call the parent onUpdate function to redraw the layout
+        //View.onUpdate(dc);
+    }
+
+    function drawTimerValBasic(dc as Dc, timerVal as Float) as Void
+    {
+        var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
+        var fontWidth = fontHeight * 0.6;
+        //var dotWidth = fontWidth * 0.4;
+
+        var centerX = dc.getWidth() / 2 - fontWidth / 2;
+        var centerY = dc.getHeight() / 2 - fontHeight / 2;
+
+        var pickerSecondsOffsetX = centerX + fontHeight * 0.2;
+        var pickerOffsetY = centerY + fontHeight;
+        var pickerTenthsOffsetX = pickerSecondsOffsetX + fontHeight * 0.5;
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.drawText(centerX, centerY, Graphics.FONT_LARGE, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_LEFT);
@@ -166,10 +179,6 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
             //dc.drawRectangle(centerX + fontWidth, centerY, fontWidth, fontHeight); // around tenths
             dc.drawText(pickerTenthsOffsetX, pickerOffsetY, Graphics.FONT_MEDIUM, "^", Graphics.TEXT_JUSTIFY_CENTER);
         }
-
-
-        // Call the parent onUpdate function to redraw the layout
-        //View.onUpdate(dc);
     }
 
     // Called when this View is removed from the screen. Save the
