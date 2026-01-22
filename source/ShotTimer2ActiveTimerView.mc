@@ -56,7 +56,6 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
         {
             _alertTriggered = true;  
 
-            System.println("Playing vibe and tone");   
             var toneData = 
             [
                 new Attention.ToneProfile(2500, 500)

@@ -27,8 +27,6 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         _timerState = timerState;
         _selectedTimerId = selectedTimerId;
 
-        System.println("entering ShotTimer2SetSelectedTimerView with timerId: " + _selectedTimerId.toString());
-
         View.initialize();
     }
 

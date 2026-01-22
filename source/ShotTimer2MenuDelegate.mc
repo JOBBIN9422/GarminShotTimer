@@ -16,7 +16,6 @@ class ShotTimer2MenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item as WatchUi.MenuItem) as Void
     {
-        System.println(item.getId());
         if (item.getId() == :start_delay or item.getId() == :interval_duration)
         {
             var view = new ShotTimer2SetSelectedTimerView(_timerState, item.getId() as Symbol);
