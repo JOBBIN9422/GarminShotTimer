@@ -4,6 +4,8 @@ import Toybox.WatchUi;
 
 public class Drawing
 {
+    public static var TIMER_FORMAT_STR = "%.1f";
+
     public static function drawTimerValueBasic(dc as Dc, timerVal as Float) as Void
     {
         var fontHeight = dc.getFontHeight(Graphics.FONT_LARGE);
@@ -46,37 +48,38 @@ public class Drawing
         }
     }
 
-    public static function drawTimerValueWithFont(dc as Dc, timerVal as Float, font as FontResource) as Void
+    public static function drawTextWithFont(x as Number, y as Number, text as String, dc as Dc, font as FontResource) as Void
     {
-        var centerX = dc.getWidth() / 2;
-        var centerY = dc.getHeight() / 2;
-
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.drawText(centerX, centerY, font, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(x, y, font, text, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
-    public static function drawTimerValueWithFontAndSelector(dc as Dc, timerVal as Float, selectedDigit as Number, font as FontResource) as Void
+    public static function drawTimerValueWithFont(x as Number, y as Number, dc as Dc, timerVal as Float, font as FontResource) as Void
     {
         var centerX = dc.getWidth() / 2;
         var centerY = dc.getHeight() / 2;
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
-        dc.drawText(centerX, centerY, font, timerVal.format("%.1f"), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(centerX, centerY, font, timerVal.format(TIMER_FORMAT_STR), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
 
+    public static function drawTimerValueWithFontAndSelector(x as Number, y as Number, dc as Dc, timerVal as Float, selectedDigit as Number, font as FontResource) as Void
+    {
+        drawTimerValueWithFont(x, y, dc, timerVal, font);
 
-        var textWidth = dc.getTextWidthInPixels(timerVal.format("%.1f"), font);
-        var selectorY = centerY + dc.getFontHeight(font) / 2 + 5;
+        var textWidth = dc.getTextWidthInPixels(timerVal.format(TIMER_FORMAT_STR), font);
+        var selectorY = y - dc.getFontHeight(font) - 10;
         var selectorX = 0;
 
         if (selectedDigit == 0)
         {
-            selectorX = centerX - textWidth / 2 + textWidth / 4;
+            selectorX = x - textWidth / 2 + textWidth / 4;
         }
         else if (selectedDigit == 1)
         {
-            selectorX = centerX + textWidth / 4;
+            selectorX = x + textWidth / 4;
         }
 
-        dc.drawText(selectorX, selectorY, Graphics.FONT_MEDIUM, "^", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(selectorX, selectorY, Graphics.FONT_MEDIUM, "V", Graphics.TEXT_JUSTIFY_CENTER);
     }
 }

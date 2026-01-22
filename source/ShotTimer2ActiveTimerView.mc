@@ -8,6 +8,10 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
 {
     private var _font as FontResource?;
 
+    private var _iconBitmap as BitmapResource?;
+
+    private var _subscrBoundingBox as Toybox.Graphics.BoundingBox?;
+
     private var _timerState as IntervalTimer;
     private var _timer as Timer.Timer?;
 
@@ -31,6 +35,9 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
         //setLayout(Rez.Layouts.ActiveTimerLayout(dc));
 
         _font = WatchUi.loadResource($.Rez.Fonts.id_font_gameplay) as FontResource;
+
+        _subscrBoundingBox = WatchUi.getSubscreen();
+        _iconBitmap = WatchUi.loadResource($.Rez.Drawables.AppIcon_Inverted) as BitmapResource;
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.clear();
@@ -99,6 +106,11 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
     {
         dc.clear();
 
+        if (_subscrBoundingBox != null and _iconBitmap != null)
+        {
+            dc.drawBitmap(_subscrBoundingBox.x, _subscrBoundingBox.y, _iconBitmap);
+        }
+
         // handle event flags (playback and/or exit)
         if (_intervalStartAlertRequested)
         {
@@ -117,9 +129,25 @@ class ShotTimer2ActiveTimerView extends WatchUi.View
             return;
         }
 
+        var centerX = dc.getWidth() / 2;
+        var centerY = dc.getHeight() / 2;
+        var textY = centerY + dc.getHeight() / 4;
+
         var timerVal = _timerState.getCurrentTimeRemaining() >= 0.0 ? _timerState.getCurrentTimeRemaining() : 0.0;
-        Drawing.drawTimerValueWithFont(dc, timerVal, _font);
-        
+
+        var displayStr = "";
+        if (_timerState.getCurrentState() == IntervalTimer.STATE_TIMING_START_DELAY)
+        {
+            displayStr = "WAIT";
+        }
+        else if (_timerState.getCurrentState() == IntervalTimer.STATE_TIMING_INTERVAL)
+        {
+            displayStr = "INTERVAL";
+        }
+
+        Drawing.drawTimerValueWithFont(centerX, centerY, dc, timerVal, _font);
+        Drawing.drawTextWithFont(centerX, textY, displayStr, dc, _font);
+
         // Call the parent onUpdate function to redraw the layout
         //View.onUpdate(dc);
     }

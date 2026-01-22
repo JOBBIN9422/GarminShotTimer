@@ -13,6 +13,9 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     }
 
     private var _font as FontResource?;
+    private var _iconBitmap as BitmapResource?;
+
+    private var _subscrBoundingBox as Toybox.Graphics.BoundingBox?;
 
     private var _timerState as IntervalTimer;
     private var _selectedTimerId as Symbol;
@@ -121,6 +124,9 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
 
         _font = WatchUi.loadResource($.Rez.Fonts.id_font_gameplay) as FontResource;
 
+        _subscrBoundingBox = WatchUi.getSubscreen();
+        _iconBitmap = WatchUi.loadResource($.Rez.Drawables.AppIcon_Inverted) as BitmapResource;
+
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.clear();
     }
@@ -128,13 +134,20 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
-    function onShow() as Void {
+    function onShow() as Void
+    {
+        
     }
 
     // Update the view
     function onUpdate(dc as Dc) as Void
     {
         dc.clear();
+
+        if (_subscrBoundingBox != null and _iconBitmap != null)
+        {
+            dc.drawBitmap(_subscrBoundingBox.x, _subscrBoundingBox.y, _iconBitmap);
+        }
 
         if (_exitRequested)
         {
@@ -144,17 +157,24 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
         }
 
         var timerVal = 0.0;
+        var displayStr = "";
         if (_selectedTimerId == :start_delay)
         {
             timerVal = _timerState.getDelayDuration();
-
+            displayStr = "DELAY";
         }
         else if (_selectedTimerId == :interval_duration)
         {
             timerVal = _timerState.getIntervalDuration();
+            displayStr = "INTERVAL";
         }
 
-        Drawing.drawTimerValueWithFontAndSelector(dc, timerVal, _selectedDigit, _font);
+        var centerX = dc.getWidth() / 2;
+        var centerY = dc.getHeight() / 2;
+        var textY = centerY + dc.getHeight() / 4;
+
+        Drawing.drawTimerValueWithFontAndSelector(centerX, centerY, dc, timerVal, _selectedDigit, _font);
+        Drawing.drawTextWithFont(centerX, textY, displayStr, dc, _font);
         
         // Call the parent onUpdate function to redraw the layout
         //View.onUpdate(dc);

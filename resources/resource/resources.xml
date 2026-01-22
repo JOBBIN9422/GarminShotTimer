@@ -1,5 +1,5 @@
 <resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
     <fonts>
-        <font id="id_font_gameplay" filename="fonts/gameplay.fnt" filter="0123456789._" />
+        <font id="id_font_gameplay" filename="fonts/gameplay.fnt" filter="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._ " />
     </fonts>
 </resources>
