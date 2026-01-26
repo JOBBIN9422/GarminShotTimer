@@ -66,9 +66,10 @@ public class Drawing
     public static function drawTimerValueWithFontAndSelector(x as Number, y as Number, dc as Dc, timerVal as Float, selectedDigit as Number, font as FontResource) as Void
     {
         drawTimerValueWithFont(x, y, dc, timerVal, font);
-
+        
+        var selectorPadding = dc.getHeight() * 0.1; 
         var textWidth = dc.getTextWidthInPixels(timerVal.format(TIMER_FORMAT_STR), font);
-        var selectorY = y - dc.getFontHeight(font) - 10;
+        var selectorY = y - dc.getFontHeight(font) - selectorPadding;
         var selectorX = 0;
 
         if (selectedDigit == 0)
@@ -80,6 +81,6 @@ public class Drawing
             selectorX = x + textWidth / 4;
         }
 
-        dc.drawText(selectorX, selectorY, Graphics.FONT_MEDIUM, "V", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(selectorX, selectorY, font, "V", Graphics.TEXT_JUSTIFY_CENTER);
     }
 }

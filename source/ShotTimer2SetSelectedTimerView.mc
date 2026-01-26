@@ -13,9 +13,6 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     }
 
     private var _font as FontResource?;
-    private var _iconBitmap as BitmapResource?;
-
-    private var _subscrBoundingBox as Toybox.Graphics.BoundingBox?;
 
     private var _timerState as IntervalTimer;
     private var _selectedTimerId as Symbol;
@@ -122,9 +119,6 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
 
         _font = WatchUi.loadResource($.Rez.Fonts.id_font_gameplay) as FontResource;
 
-        _subscrBoundingBox = WatchUi.getSubscreen();
-        _iconBitmap = WatchUi.loadResource($.Rez.Drawables.AppIcon_Inverted) as BitmapResource;
-
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_WHITE);
         dc.clear();
     }
@@ -141,11 +135,6 @@ class ShotTimer2SetSelectedTimerView extends WatchUi.View {
     function onUpdate(dc as Dc) as Void
     {
         dc.clear();
-
-        if (_subscrBoundingBox != null and _iconBitmap != null)
-        {
-            dc.drawBitmap(_subscrBoundingBox.x, _subscrBoundingBox.y, _iconBitmap);
-        }
 
         if (_exitRequested)
         {
