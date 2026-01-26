@@ -26,7 +26,9 @@ class ShotTimer2App extends Application.AppBase {
         menu.addItem(new WatchUi.MenuItem("Interval Duration", null, :interval_duration, null));
         menu.addItem(new WatchUi.MenuItem("START", null, :start_selector, null));
 
-        return [ new ShotTimer2View(), new ShotTimer2Delegate(timerState, menu) ];
+        var menuDelegate = new ShotTimer2MenuDelegate(menu, timerState);
+
+        return [ menu, menuDelegate ];
     }
 
 }
