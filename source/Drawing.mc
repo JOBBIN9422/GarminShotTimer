@@ -67,9 +67,10 @@ public class Drawing
     {
         drawTimerValueWithFont(x, y, dc, timerVal, font);
         
-        var selectorPadding = dc.getHeight() * 0.1; 
+        var selectorPadding = dc.getFontHeight(font) * 0.25;
+        var selectorSize = dc.getFontHeight(font) * 0.25; 
         var textWidth = dc.getTextWidthInPixels(timerVal.format(TIMER_FORMAT_STR), font);
-        var selectorY = y - dc.getFontHeight(font) - selectorPadding;
+        var selectorY = y - dc.getFontHeight(font) / 2 - selectorPadding;
         var selectorX = 0;
 
         if (selectedDigit == 0)
@@ -78,9 +79,19 @@ public class Drawing
         }
         else if (selectedDigit == 1)
         {
-            selectorX = x + textWidth / 4;
+            selectorX = x + textWidth / 3.5;
         }
 
-        dc.drawText(selectorX, selectorY, font, "V", Graphics.TEXT_JUSTIFY_CENTER);
+        // draw top selector
+        dc.fillPolygon([[selectorX - selectorSize, selectorY + selectorSize],
+                        [selectorX + selectorSize, selectorY + selectorSize],
+                        [selectorX, selectorY]]);
+
+        // draw bottom selector
+        selectorY = y + dc.getFontHeight(font) / 2 + selectorPadding; 
+        dc.fillPolygon([[selectorX - selectorSize, selectorY - selectorSize],
+                        [selectorX + selectorSize, selectorY - selectorSize],
+                        [selectorX, selectorY]]);
+        //dc.drawText(selectorX, selectorY, font, "V", Graphics.TEXT_JUSTIFY_CENTER);
     }
 }
